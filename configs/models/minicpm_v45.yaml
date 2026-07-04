@@ -1,0 +1,7 @@
+family: minicpm
+model_name: openbmb/MiniCPM-V-4_5
+role: main
+dtype: bfloat16
+device: cuda
+extra:
+  attn_implementation: sdpa

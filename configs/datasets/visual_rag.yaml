@@ -1,0 +1,9 @@
+dataset: visual_rag
+input_dir: /path/to/visual_rag
+split: test
+retrieval_file: /path/to/retrieved_candidates.jsonl
+manifest: data/manifests/visual_rag_candidates.jsonl
+metric: f1
+llm_judge:
+  enabled: false
+  model: gpt-4o-mini

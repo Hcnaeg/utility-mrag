@@ -1,0 +1,19 @@
+name: table1_mrag_bench
+description: >
+  Main MRAG-Bench results: surrogate Qwen3-VL-2B selects Top-K candidates,
+  main model generates final answers. Reproduces Table 1 of the paper.
+
+dataset_config: configs/datasets/mrag_bench.yaml
+surrogate_model_config: configs/models/qwen3_vl_2b_surrogate.yaml
+
+main_models:
+  - configs/models/qwen3_vl_8b.yaml
+  - configs/models/minicpm_v45.yaml
+  - configs/models/gemma3_12b.yaml
+  - configs/models/ovis25_9b.yaml
+  - configs/models/internvl35_8b.yaml
+
+selection:
+  template: helpfulness
+  score_key: true_logit
+  top_k: [1, 3, 5]

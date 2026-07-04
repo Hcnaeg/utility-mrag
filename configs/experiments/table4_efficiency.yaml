@@ -1,0 +1,23 @@
+name: table4_efficiency
+description: >
+  FLOPs / latency profile of the surrogate-accelerated pipeline vs. the
+  answer-level baseline that runs the main model on every candidate.
+  Reproduces Table 4.
+
+profiles:
+  - name: surrogate_scoring
+    model_config: configs/models/qwen3_vl_2b_surrogate.yaml
+    task: scoring
+  - name: main_generation_topk3
+    model_config: configs/models/qwen3_vl_8b.yaml
+    task: generation
+    extra:
+      num_images: 4   # input image + 3 selected
+  - name: answer_level_uq_baseline
+    model_config: configs/models/qwen3_vl_8b.yaml
+    task: generation
+    extra:
+      num_images: 2   # input image + 1 candidate; repeated per candidate
+
+num_iters: 5
+warmup: 1

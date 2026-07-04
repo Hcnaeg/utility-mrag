@@ -1,0 +1,7 @@
+family: internvl
+model_name: OpenGVLab/InternVL3_5-8B
+role: main
+dtype: bfloat16
+extra:
+  image_size: 448
+  device_map: auto

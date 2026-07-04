@@ -1,0 +1,84 @@
+[project]
+name = "utility-mrag"
+version = "0.1.0"
+description = "Utility-oriented visual evidence selection for multimodal retrieval-augmented generation."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Weiqing Luo" }
+]
+keywords = [
+  "multimodal-rag",
+  "retrieval-augmented-generation",
+  "visual-evidence",
+  "vlm",
+  "uncertainty",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+  "torch>=2.1",
+  "transformers>=4.45",
+  "accelerate>=0.30",
+  "pillow>=10.0",
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "tqdm>=4.65",
+  "pyyaml>=6.0",
+  "jsonlines>=4.0",
+  "scikit-learn>=1.3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4",
+  "ruff>=0.5",
+  "mypy>=1.8",
+]
+clip = [
+  "open-clip-torch>=2.24",
+]
+eval = [
+  "openai>=1.30",
+]
+profile = [
+  "fvcore>=0.1.5",
+  "calflops>=0.3",
+]
+datasets = [
+  "datasets>=2.18",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/utility-mrag"
+Issues = "https://github.com/your-org/utility-mrag/issues"
+
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["utility_mrag"]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"

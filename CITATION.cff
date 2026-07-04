@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "utility-mrag: Utility-Oriented Visual Evidence Selection for Multimodal Retrieval-Augmented Generation"
+authors:
+  - family-names: "Luo"
+    given-names: "Weiqing"
+type: software
+license: MIT
+repository-code: "https://github.com/your-org/utility-mrag"
+preferred-citation:
+  type: article
+  title: "Utility-Oriented Visual Evidence Selection for Multimodal Retrieval-Augmented Generation"
+  authors:
+    - family-names: "Luo"
+      given-names: "Weiqing"
+  year: 2026

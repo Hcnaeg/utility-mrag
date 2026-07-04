@@ -1,0 +1,6 @@
+family: gemma
+model_name: google/gemma-3-12b-it
+role: main
+dtype: bfloat16
+extra:
+  device_map: auto

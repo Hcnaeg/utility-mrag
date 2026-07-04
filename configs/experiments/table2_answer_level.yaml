@@ -1,0 +1,18 @@
+name: table2_answer_level_baseline
+description: >
+  Answer-level uncertainty baseline (softmax entropy and min-token-probability)
+  using the main model directly to score candidates. Reproduces Table 2.
+
+dataset_configs:
+  - configs/datasets/mrag_bench.yaml
+  - configs/datasets/visual_rag.yaml
+
+main_model_config: configs/models/qwen3_vl_8b.yaml
+
+baselines:
+  - method: softmax_entropy
+  - method: min_token_probability
+
+selection:
+  top_k: [1, 3, 5]
+  max_new_tokens: 32

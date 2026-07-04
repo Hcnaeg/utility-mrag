@@ -1,0 +1,16 @@
+dataset: mrag_bench
+input_dir: /path/to/mrag_bench
+split: test
+retrieval_file: /path/to/retrieved_candidates.jsonl
+manifest: data/manifests/mrag_bench_candidates.jsonl
+metric: exact_match
+scenarios:
+  - Angle
+  - Partial
+  - Scope
+  - Occlusion
+  - Temporal
+  - Deformation
+  - Incomplete
+  - Biological
+  - Others

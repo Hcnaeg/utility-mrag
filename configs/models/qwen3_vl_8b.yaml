@@ -1,0 +1,7 @@
+family: qwen3_vl
+model_name: Qwen/Qwen3-VL-8B-Instruct
+role: main
+dtype: bfloat16
+extra:
+  attn_implementation: flash_attention_2
+  device_map: auto
