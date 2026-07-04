@@ -181,9 +181,11 @@ utility-mrag/
 ## Citation
 
 ```bibtex
-@article{luo2026utility_mrag,
-  title   = {Utility-Oriented Visual Evidence Selection for Multimodal Retrieval-Augmented Generation},
-  author  = {Luo, Weiqing and others},
-  year    = {2026}
+@inproceedings{luo2026utility,
+  title={Utility-Oriented Visual Evidence Selection for Multimodal Retrieval-Augmented Generation},
+  author={Luo, Weiqing and Hu, Zongye and Wang, Xiao and Yu, Zhiyuan and Zhang, Haofeng and Huang, Ziyi},
+  booktitle={Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages={35091--35124},
+  year={2026}
 }
 ```
