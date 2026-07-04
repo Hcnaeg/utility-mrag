@@ -66,6 +66,35 @@ def parse_multi_choice_response(
     return candidates[best_idx]
 
 
+def _extract_leading_choice(
+    response: str,
+    all_choices: Sequence[str] = ("A", "B", "C", "D"),
+) -> Optional[str]:
+    """Recover a choice letter from a ``"<letter><delimiter> ..."`` response.
+
+    Many VLMs answer with the letter followed by its label, e.g.
+    ``"B: capuchin"`` or ``"(C) New York City"``. The MMMU-style parser only
+    matches bare ``" B "`` / ``"(B)"`` tokens and misses these, which would
+    otherwise force a random guess. This fallback recovers the leading letter
+    only when it is immediately followed by end-of-string or a non-alphanumeric
+    delimiter, so plain prose (``"Based on ..."``) is never mis-read.
+    """
+    s = response.strip()
+    if not s:
+        return None
+    if s[0] == "(":
+        s = s[1:].lstrip()
+    if not s:
+        return None
+    first = s[0].upper()
+    if first not in all_choices:
+        return None
+    rest = s[1:]
+    if rest == "" or rest[0] in ":).,-]}\t 、）":
+        return first
+    return None
+
+
 def score_mrag_bench(
     records: Iterable[Dict[str, Any]],
     *,
@@ -103,8 +132,14 @@ def score_mrag_bench(
         }
         parsed = parse_multi_choice_response(out, all_choices, index2ans)
         if parsed not in all_choices:
-            unparsed += 1
-            parsed = _RNG.choice(all_choices)
+            # Fallback: recover a leading "<letter>: label" style answer before
+            # resorting to a random guess (mirrors the original behaviour).
+            leading = _extract_leading_choice(out, all_choices)
+            if leading is not None:
+                parsed = leading
+            else:
+                unparsed += 1
+                parsed = _RNG.choice(all_choices)
         preds.append(parsed)
         gts.append(gt)
         scenarios.append(str(item.get(scenario_key, "Unknown")))

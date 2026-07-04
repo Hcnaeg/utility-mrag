@@ -3,5 +3,7 @@ model_name: Qwen/Qwen3-VL-2B-Instruct
 role: surrogate
 dtype: bfloat16
 extra:
-  attn_implementation: flash_attention_2
+  # "sdpa" runs everywhere out of the box. Switch to "flash_attention_2" if you
+  # have installed flash-attn (see docs/model_setup.md) for faster scoring.
+  attn_implementation: sdpa
   device_map: auto

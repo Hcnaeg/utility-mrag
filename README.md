@@ -53,12 +53,45 @@ A toy quickstart that doesn't require any model weights:
 uv run python examples/quickstart_selection.py
 ```
 
+### Tested environment
+
+The pipeline is verified on Linux + a single CUDA GPU (≈16 GB is enough for the
+2B models) with:
+
+| Package | Version |
+| --- | --- |
+| Python | 3.11 |
+| torch / torchvision | 2.12 / 0.27 (CUDA build matching your driver) |
+| transformers | 4.57.3 (`>=4.57,<5` — see [`docs/model_setup.md`](docs/model_setup.md)) |
+| accelerate | 1.13 |
+
+Install a `torch`/`torchvision` build that matches your CUDA version from the
+[official index](https://pytorch.org/get-started/locally/) if the default
+wheels don't match your driver. `transformers` **must stay below 5.x**: Qwen3-VL
+needs ≥4.57, while the Ovis 2.5 / MiniCPM-V remote code relies on the 4.x API.
+
 ## Data preparation
 
 Raw datasets are not bundled. See [`data/README.md`](data/README.md) and
-[`docs/data_preparation.md`](docs/data_preparation.md) for download links and
-preparation commands. The prepare scripts produce a JSONL manifest per
-dataset:
+[`docs/data_preparation.md`](docs/data_preparation.md) for details.
+
+**MRAG-Bench (zero-config).** The official `uclanlp/MRAG-Bench` release already
+ships, per question, the input image, the ground-truth images, and the
+CLIP-retrieved candidate images. The quickest path extracts those directly into
+a manifest -- no separate image corpus or retrieval file needed:
+
+```bash
+uv sync --extra datasets      # provides `datasets` / `pyarrow`
+uv run python scripts/prepare_mrag_bench_hf.py \
+    --output data/manifests/mrag_bench_candidates.jsonl \
+    --image_dir data/images/mrag_bench \
+    --split test
+# add e.g. `--limit 20 --num_candidates 5` for a fast smoke-test subset
+```
+
+**Bring-your-own-retriever.** If you want to rerank candidates from your own
+retriever over a local image corpus, use the generic prepare scripts with a
+retrieval JSONL instead (see [`docs/data_preparation.md`](docs/data_preparation.md)):
 
 ```bash
 uv run python scripts/prepare_mrag_bench.py \

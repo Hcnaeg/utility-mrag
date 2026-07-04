@@ -152,3 +152,42 @@ class Qwen3VLModel(BaseMultimodalModel):
             clean_up_tokenization_spaces=False,
         )[0]
         return text.strip()
+
+    # ------------------------------------------------------------------
+    def generate_answer_with_scores(
+        self,
+        *,
+        query: str,
+        image_paths,
+        max_new_tokens: int = 32,
+    ):
+        """Generate an answer and also return per-step logits.
+
+        Returns ``(text, scores)`` where ``scores`` is the list of first-choice
+        logit tensors (one per generated step) produced by
+        ``generate(..., output_scores=True)``. Used by the answer-level
+        uncertainty baseline.
+        """
+        import torch
+
+        self.ensure_loaded()
+        if not isinstance(image_paths, (list, tuple)):
+            image_paths = [image_paths]
+        inputs = self._prepare_inputs(query, image_paths)
+        with torch.no_grad():
+            generated = self._model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                do_sample=False,
+                output_scores=True,
+                return_dict_in_generate=True,
+                pad_token_id=self._processor.tokenizer.eos_token_id,
+            )
+        prompt_len = inputs["input_ids"].shape[1]
+        trimmed = generated.sequences[0][prompt_len:]
+        text = self._processor.batch_decode(
+            [trimmed],
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=False,
+        )[0].strip()
+        return text, list(generated.scores)

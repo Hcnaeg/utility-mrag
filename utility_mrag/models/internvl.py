@@ -12,9 +12,7 @@ import io
 import logging
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-import torchvision.transforms as T
 from PIL import Image
-from torchvision.transforms.functional import InterpolationMode
 
 from utility_mrag.scoring.true_false_logits import TrueFalseLogitExtractor
 
@@ -37,6 +35,9 @@ def _to_pil(img: Any) -> Image.Image:
 
 
 def _build_transform(image_size: int = 448):
+    import torchvision.transforms as T
+    from torchvision.transforms.functional import InterpolationMode
+
     return T.Compose(
         [
             T.Lambda(lambda img: img.convert("RGB")),

@@ -1,5 +1,5 @@
 family: qwen3_vl
-model_name: Qwen/Qwen3-VL-8B-Instruct
+model_name: Qwen/Qwen3-VL-2B-Instruct
 role: main
 dtype: bfloat16
 extra:

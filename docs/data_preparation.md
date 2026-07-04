@@ -19,7 +19,30 @@ Both scripts expect:
 
 The combined output is the unified manifest documented in [data/README.md](../data/README.md).
 
-## MRAG-Bench
+## MRAG-Bench (zero-config, recommended)
+
+The official `uclanlp/MRAG-Bench` HuggingFace dataset already bundles, for every
+question, the input image, the ground-truth images, and the officially
+CLIP-retrieved candidate images (all inline). `scripts/prepare_mrag_bench_hf.py`
+extracts them straight into the unified manifest -- no local image corpus or
+retrieval JSONL required:
+
+```bash
+uv sync --extra datasets     # provides `datasets` / `pyarrow`
+uv run python scripts/prepare_mrag_bench_hf.py \
+    --output data/manifests/mrag_bench_candidates.jsonl \
+    --image_dir data/images/mrag_bench \
+    --split test
+```
+
+Useful flags: `--limit N` (first N questions, for a smoke test),
+`--num_candidates K` (keep at most K retrieved images per question), and
+`--no_gt` (exclude ground-truth images from the candidate pool).
+
+## MRAG-Bench (bring-your-own-retriever)
+
+Use this path if you want to rerank candidates produced by your **own**
+retriever over a local image corpus.
 
 ```bash
 # 1. Download the questions and image corpus (see the upstream README).

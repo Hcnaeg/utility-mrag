@@ -17,6 +17,14 @@ the checkpoints yourself.
 All wrappers are registered with the `@register_model("...")` decorator and
 can be selected purely from a YAML config; see `configs/models/*.yaml`.
 
+## Transformers version
+
+Use **`transformers>=4.57,<5`** (pinned in `pyproject.toml`). Qwen3-VL was added
+in 4.57, while the remote code shipped with Ovis 2.5 and MiniCPM-V targets the
+4.x API (transformers 5.x removed attributes such as `is_parallelizable` and
+changed the weight-loading path). The Qwen3-VL image/video processor also
+requires `torchvision`, which is a core dependency for that reason.
+
 ## Authentication
 
 Gated models read the token from `HF_TOKEN` or `HUGGINGFACE_TOKEN` (in that

@@ -1,0 +1,7 @@
+family: ovis
+model_name: AIDC-AI/Ovis2.5-2B
+role: main
+dtype: bfloat16
+device: cuda
+extra:
+  max_pixels: 802816

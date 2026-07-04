@@ -40,6 +40,16 @@ class OvisModel(BaseMultimodalModel):
         import torch
         from transformers import AutoModelForCausalLM
 
+        # Compatibility shim: the Ovis2.5 remote modeling code was written for
+        # transformers 4.x and reads ``is_parallelizable`` off its inner LLM,
+        # an attribute that transformers 5.x removed from ``PreTrainedModel``.
+        # Qwen3-VL requires transformers 5.x, so instead of downgrading we
+        # restore the attribute as a harmless class default.
+        from transformers.modeling_utils import PreTrainedModel as _PTM
+
+        if not hasattr(_PTM, "is_parallelizable"):
+            _PTM.is_parallelizable = False
+
         hf_token = self.config.extra.get("hf_token") or os.getenv("HF_TOKEN") or os.getenv("HUGGINGFACE_TOKEN")
         kwargs: Dict[str, Any] = {
             "torch_dtype": torch.bfloat16,

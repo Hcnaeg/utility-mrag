@@ -83,11 +83,15 @@ _UQ_METHODS = {
 def _generate_with_scores(model, *, query: str, image_paths, max_new_tokens: int):
     """Drive the wrapper's underlying generate with output_scores=True.
 
-    Falls back to a heuristic uncertainty of 0 when the wrapper's model object
-    is not directly accessible. Wrappers are expected to expose ``_model`` and
-    ``_processor`` (Qwen3-VL / Gemma) for full UQ; other wrappers will return
-    just the generated string with ``score=0`` (documented limitation).
+    Wrappers that implement ``generate_answer_with_scores`` (e.g. Qwen3-VL)
+    return the per-step logits needed to compute token-level uncertainty. Other
+    wrappers fall back to plain generation with empty scores, in which case the
+    uncertainty is treated as 0 (documented limitation for those families).
     """
+    if hasattr(model, "generate_answer_with_scores"):
+        return model.generate_answer_with_scores(
+            query=query, image_paths=image_paths, max_new_tokens=max_new_tokens
+        )
     text = model.generate_answer(query=query, image_paths=image_paths, max_new_tokens=max_new_tokens)
     return text, []
 
